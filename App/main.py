@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request         
 import time  
 
+
 import sys
 sys.path.insert(0, '../Cosine_Slopone_itembased')
 import recomendador
@@ -12,6 +13,7 @@ import os
 owd = os.getcwd()
 os.chdir("../Cosine_Slopone_itembased/")
 recomendador.loadDataset()
+recomendador.loadLinks()
 os.chdir(owd)
 print("time to load data:", time.time()-tInit)
 
@@ -35,6 +37,9 @@ def slopeOne():
 	#render_template("slopeOne.html")
 	predecido = ''
 	tiempoCalculo = ''
+	imdbId = ''
+	mensaje = ''
+
 	if request.method == 'POST':
 		usuario = request.form['usuario_slopeone']
 		item = request.form['item_slopeone']
@@ -46,12 +51,23 @@ def slopeOne():
 		os.chdir("../Cosine_Slopone_itembased/")
 
 		if metodo=="slopeone":
-			predecido = recSystem.recomendacionesSlopeOneItem(usuario, item, reload=1)
+			predecido = recSystem.recomendacionesSlopeOneItem(usuario, item, reload=0)
+			if type(predecido) is dict:
+				mensaje = predecido["mensaje"]
+				predecido = predecido["rating"]
+			else:
+				predecido = predecido[0][1]
 		else:
 			predecido = recSystem.predecirSimilitudCosenoAjustado(usuario, item, reload=0)
+			if type(predecido) is dict:
+				mensaje = predecido["mensaje"]
+				predecido = predecido["rating"]
 			
 		os.chdir(owd)
 		tiempoCalculo = time.time()-t
+
+		imdbId = recSystem.getImdbIdByMovieId(item)
+
 		print("Time to calculate similitud:", tiempoCalculo)
 	else:
 		usuario = ''
@@ -60,7 +76,7 @@ def slopeOne():
 	#return render_template("slopeOne.html")
 	
 	temp = ["Firulais","abc","cde"]
-	return render_template("slopeOne.html",result = temp, usuario = usuario, item=item, predecido=predecido, tiempoCalculo=tiempoCalculo)
+	return render_template("slopeOne.html",result = temp, usuario = usuario, item=item, predecido=predecido, tiempoCalculo=tiempoCalculo, imdbId=imdbId, mensaje=mensaje)
 
 @app.route("/addUser")
 def addUser():

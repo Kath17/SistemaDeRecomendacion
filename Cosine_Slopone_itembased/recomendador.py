@@ -14,7 +14,7 @@ from multiprocessing import Process, Manager
 import itertools
 
 import sqlite3 as lite
-
+import pandas as pd
 
 def intersection(lst1, lst2): 
     return list(set(lst1) & set(lst2)) 
@@ -24,6 +24,7 @@ data = {}
 productid2name = {}
 promedios = {}
 clavesTotal = []
+links = {}
 
 def loadDataset():
     global data
@@ -35,6 +36,12 @@ def loadDataset():
     productid2name = recomendador.load_obj("product_movies27m")
     promedios = recomendador.load_obj("promedios_users27m")
     clavesTotal = sorted(data, key=lambda k: len(data[k]), reverse=False)
+
+def loadLinks():
+    global links
+    links = pd.read_csv("links.csv", dtype = {'imdbId': str})
+    links = links.set_index("movieId")
+    #print(links["imdbId"][int("1")])
 
 
 ###DESVIACIONES PARA SLOPE ONE
@@ -188,6 +195,9 @@ class Recomendador:
         if type(data).__name__ == 'dict':
             data = data
 
+    def getImdbIdByMovieId(self, itemId):
+        return links["imdbId"][int(itemId)]
+
     def normalizar(self, rating):
         minR = 1
         maxR = 5
@@ -202,7 +212,7 @@ class Recomendador:
     def predecirSimilitudCosenoAjustado(self, usuario, itemObj, reload=0):
         if usuario in data[itemObj]:
             print("Usuario ya califico dicho item")
-            return data[itemObj][usuario]
+            return {"mensaje": "Usuario ya califico dicho item", "rating": data[itemObj][usuario]}
 
         if reload==1: #VOlver a realizar la carga
             calcularSimilitudes1Item_mp(itemObj)
@@ -362,7 +372,7 @@ class Recomendador:
         #print(self.desviaciones)
         if usuario in data[itemObj]:
             print("Usuario ya califico dicho item")
-            return data[itemObj][usuario]
+            return {"mensaje": "Usuario ya califico dicho item", "rating": data[itemObj][usuario]}
         
         ####
         if reload==1: #VOlver a realizar la carga

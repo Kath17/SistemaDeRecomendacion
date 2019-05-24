@@ -26,57 +26,50 @@
 	  				<div class="logo"><a href="/"><img src="/static/img/logo.png" width="100%"></a></div>
 	  				<div class="top_menu" style="margin-left: 70px;">
 			          	<form action="/slopeOne" method="post">
-			          		<select name="itembased_m" style="border-radius: 10px;
+							<select name="itembased_m" style="border-radius: 10px;
 									border: 0px solid white;
 									padding: 10px;
-									margin-right: 10px;
+									margin-right: 10px
 									min-width:240px;
-    								min-height: 30px;">
-			          			<option value="slopeone_" selected> Slope One </option>
-			          			<option value="ajustedcosine"> Ajusted Cosine </option>
-			          		</select>
-			          		<input type="text" name="usuario_slopeone" placeholder="Usuario" >
-			          		<input type="text" id ="id_movie" placeholder="Item">
-			          		<!--<button id="searchButton" >Predecir</button>-->
-			          		<input id="searchButton" type="button" value ="Predecir" style="	color: white;
-																			background-color: #e50914;
-																			width: 5rem;
-																			cursor: pointer;
-																			border-radius: 10px;
-																			border: 0px solid white;
-																			padding: 10px;
-																			margin-right: 10px;"/>
+									min-height: 30px;">
+								<option value="slopeone" selected> Slope One </option>
+								<option value="ajustedcosine"> Ajusted Cosine </option>
+							</select>
+							<input type="text" name="usuario_slopeone" value="{{usuario}}" placeholder="Usuario" >
+							<input type="text" name="item_slopeone" value="{{item}}" placeholder="Item" >
+							<button type="submit">Predecir</button>
 			          	</form>
 			        </div>
 			    </div>
 			    <div class="top_rigth">
-			        <p>Katherine Rocío</p>
+			        <p>TBD CS UNSA 2019</p>
 			    </div>
 			</div>
 		</div>
 	</header>
 
+	{% if mensaje!='' %} 
+	<div style="text-align:center">
+		{{mensaje}}
+	</div>
+	{% endif %} 
+
+
+	{% if tiempoCalculo!='' %} 
+	<div style="text-align:center">
+		Valor predecido: {{predecido}}, en tiempo: {{tiempoCalculo}} ms
+	</div>
+
 
 	<div class="resultados">
 		<div class="resultados_contenedor" style="margin-top: 30px;">
 
-			<div class="r1">
-				<div class="r1_imagen"><img src="/static/img/aliens.jpg" alt="">
-				</div>
-				<div class="r1_info">
-					<div><span class="r1_nombre"><h2>Firulais</h2></span></div>
-					<div class="r1_puntaje">
-						<span><i class="fas fa-star">7.1</i></span>
-					</div>
-				</div>
-			</div>
-
 			<div class="r2">
 				<div class="r2_imagen"><p id="results"> </p></div>
 				<div class="r2_info">
-					<div><span class="r2_nombre"><h2>Moonligth</h2></span></div>
+					<div><span class="r2_nombre"><h2 id="title"></h2></span></div>
 					<div class="r2_puntaje">
-						<span><i class="fas fa-star">6.2</i></span>
+						<span><i class="fas fa-star">{{predecido}}</i></span>
 					</div>
 				</div>
 			</div>
@@ -84,94 +77,44 @@
 		</div>
 	</div>
 
-	<div class="resultados">
-		<div class="resultados_contenedor" style="margin-top: 30px;">
-
-			<div class="r1">
-				<div class="r1_imagen"><img src="/static/img/aliens.jpg" alt="">
-				</div>
-				<div class="r1_info">
-					<div><span class="r1_nombre"><h2>abc</h2></span></div>
-					<div class="r1_puntaje">
-						<span><i class="fas fa-star">7.1</i></span>
-					</div>
-				</div>
-			</div>
-
-			<div class="r2">
-				<div class="r2_imagen"><p id="results"> </p></div>
-				<div class="r2_info">
-					<div><span class="r2_nombre"><h2>Moonligth</h2></span></div>
-					<div class="r2_puntaje">
-						<span><i class="fas fa-star">6.2</i></span>
-					</div>
-				</div>
-			</div>
-
-		</div>
-	</div>
-
-	<div class="resultados">
-		<div class="resultados_contenedor" style="margin-top: 30px;">
-
-			<div class="r1">
-				<div class="r1_imagen"><img src="/static/img/aliens.jpg" alt="">
-				</div>
-				<div class="r1_info">
-					<div><span class="r1_nombre"><h2>cde</h2></span></div>
-					<div class="r1_puntaje">
-						<span><i class="fas fa-star">7.1</i></span>
-					</div>
-				</div>
-			</div>
-
-			<div class="r2">
-				<div class="r2_imagen"><p id="results"> </p></div>
-				<div class="r2_info">
-					<div><span class="r2_nombre"><h2>Moonligth</h2></span></div>
-					<div class="r2_puntaje">
-						<span><i class="fas fa-star">6.2</i></span>
-					</div>
-				</div>
-			</div>
-
-		</div>
-	</div>
+	{% endif %} 
 
 
+	
 
+
+	{% if tiempoCalculo!='' %} 
 	<script type="text/javascript">
         const API_KEY ="43223a67169279b9b525638821d593b0";
+		'use strict';
 
-        $('#searchButton').click(function() {
-            'use strict';
+		var id_peli = "{{imdbId}}";
+		console.log(id_peli)
+		var imageUrl = "https://api.themoviedb.org/3/find/tt"+id_peli+'?api_key='+API_KEY+"&external_source=imdb_id";
+		console.log(imageUrl);
 
-            var id_peli = $('#id_movie').val();
-            var imageUrl = "https://api.themoviedb.org/3/find/tt"+id_peli+'?api_key='+API_KEY+"&external_source=imdb_id";
-            console.log(imageUrl);
-
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                // URL a la que se enviará la solicitud Ajax
-                url: imageUrl,
-            })
-             .done(function( data, textStatus, jqXHR ) {
-                 if ( console && console.log ) {
-                     console.log(data.movie_results[0].poster_path)
-                     console.log( "La solicitud se ha completado correctamente." );
-
-                     $('#results').append('<img src="' + "http://image.tmdb.org/t/p/w154"+data.movie_results[0].poster_path + '" />');
-                 }
-             })
-             .fail(function( jqXHR, textStatus, errorThrown ) {
-                 if ( console && console.log ) {
-                     console.log( "La solicitud a fallado: " +  textStatus);
-                 }
-            });
-            return imageUrl;
-        });
-    </script>
+		$.ajax({
+			type: "GET",
+			dataType: "json",
+			// URL a la que se enviará la solicitud Ajax
+			url: imageUrl,
+		})
+			.done(function( data, textStatus, jqXHR ) {
+				if ( console && console.log ) {
+					console.log(data.movie_results[0].poster_path)
+					console.log( "La solicitud se ha completado correctamente." );
+					title = data.movie_results[0].title
+					$("#title").html(title)
+					$('#results').append('<img src="' + "http://image.tmdb.org/t/p/w154"+data.movie_results[0].poster_path + '" />');
+				}
+			})
+			.fail(function( jqXHR, textStatus, errorThrown ) {
+				if ( console && console.log ) {
+					console.log( "La solicitud a fallado: " +  textStatus);
+				}
+		});
+	</script>
+	{% endif %}
 
 </body>
 </html>

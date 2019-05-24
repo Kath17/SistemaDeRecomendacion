@@ -3,17 +3,15 @@ import time
 
 import sys
 sys.path.insert(0, '../Cosine_Slopone_itembased')
-import cosenoajustado
-import slopeone
+import recomendador
 
-recomendador = cosenoajustado.Recomendador({}, k=4, metric='coseno', n=10)
-recomendadorSlopeone = slopeone.Recomendador({})
+recSystem = recomendador.Recomendador({})
 tInit = time.time()
 
 import os
 owd = os.getcwd()
 os.chdir("../Cosine_Slopone_itembased/")
-cosenoajustado.loadDataset()
+recomendador.loadDataset()
 os.chdir(owd)
 print("time to load data:", time.time()-tInit)
 
@@ -48,9 +46,10 @@ def slopeOne():
 		os.chdir("../Cosine_Slopone_itembased/")
 
 		if metodo=="slopeone":
-			predecido = recomendador.predecirSimilitudCosenoAjustado(usuario, item, reload=0)
+			predecido = recSystem.recomendacionesSlopeOneItem(usuario, item, reload=1)
 		else:
-			predecido = recomendadorSlopeone.recomendacionesSlopeOneItem(usuario, item, reload=0)
+			predecido = recSystem.predecirSimilitudCosenoAjustado(usuario, item, reload=0)
+			
 		os.chdir(owd)
 		tiempoCalculo = time.time()-t
 		print("Time to calculate similitud:", tiempoCalculo)

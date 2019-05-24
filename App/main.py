@@ -4,6 +4,7 @@ import time
 import sys
 sys.path.insert(0, '../Cosine_Slopone_itembased')
 import cosenoajustado
+import slopeone
 
 recomendador = cosenoajustado.Recomendador({}, k=4, metric='coseno', n=10)
 tInit = time.time()

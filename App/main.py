@@ -33,20 +33,29 @@ def ranking():
 @app.route("/slopeOne",methods=['GET','POST'])
 def slopeOne():
 	#render_template("slopeOne.html")
-	user = request.form['usuario_slopeone']
-	item = request.form['item_slopeone']
+	predecido = ''
+
+	if request.method == 'POST':
+		usuario = request.form['usuario_slopeone']
+		item = request.form['item_slopeone']
+		print(usuario)
+		#usuario = '1'
+		#item = '3'
+		t = time.time()
+		owd = os.getcwd()
+		os.chdir("../Cosine_Slopone_itembased/")
+		predecido = recomendador.predecirSimilitudCosenoAjustado(usuario, item, reload=0)
+		os.chdir(owd)
+		tiempoCalculo = time.time()-t
+		print("Time to calculate similitud:", tiempoCalculo)
+	else:
+		usuario = ''
+		item = ''
 	#print(user)
 	#return render_template("slopeOne.html")
-
-	usuario = '1'
-	item = '3'
-	t = time.time()
-	predecido = recomendador.predecirSimilitudCosenoAjustado(usuario, item, reload=0)
-	tiempoCalculo = time.time()-t
-	print("Time to calculate similitud:", tiempoCalculo)
 	
 	temp = ["Firulais","abc","cde"]
-	return render_template("slopeOne.html",result = temp)
+	return render_template("slopeOne.html",result = temp, usuario = usuario, item=item, predecido=predecido, tiempoCalculo=tiempoCalculo)
 
 @app.route("/addUser")
 def addUser():

@@ -22,13 +22,25 @@
 	  	<div class="center-top">
 	  		<div class="top">
 	  			<div class="top_left">
-	  				<div class="logo"><img src="{{url_for('static', filename='img/logo.png')}}" width="100%"></div>
-	  				<div class="top_menu">
+	  				<div class="logo"><a href="/"><img src="{{url_for('static', filename='img/logo.png')}}" width="100%"></a></div>
+	  				<div class="top_menu" style="margin-left: 70px;">
 			          	<form action="#">
-			          		<input type="text" placeholder="Metrica">
+			          		<select style="border-radius: 10px;
+									border: 0px solid white;
+									padding: 10px;
+									margin-right: 10px;
+									min-width:240px;
+    								min-height: 30px;">
+			          			<option value="manhattan" > Manhattan </option>
+			          			<option value="euclidean"> Euclidean </option>
+			          			<option value="pearson" > Pearson </option>
+			          			<option value="coseno" selected> Coseno </option>
+			          		</select>
 			          		<input type="text" placeholder="K">
 			          		<input type="text" placeholder="Umbral">
-			          		<button type="submit">OK</button>
+			          		<button type="submit" style="
+									min-width:140px;
+    								min-height: 30px;">Recomendar</button>
 			          	</form>
 			        </div>
 			    </div>
@@ -36,11 +48,16 @@
 			        <p>Katherine Rocío</p>
 			    </div>
 			</div>
+			<div class="top_menu" style="margin-left: 424px;">
+	        	<input type="text" placeholder="Usuario">
+	          	<input type="text" placeholder="Item">
+	        	<button type="submit">Predecir</button>
+	        </div>
 		</div>
 	</header>
 
 	<div class="resultados">
-		<div class="resultados_contenedor">
+		<div class="resultados_contenedor" style="margin-top: 30px;">
 			<div class="r1">
 				<div class="r1_imagen"><img src="{{url_for('static', filename='img/aliens.jpg')}}" alt="">
 				</div>

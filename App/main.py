@@ -18,6 +18,14 @@ def ranking():
 def slopeOne():
     return render_template("slopeOne.html")
 
+@app.route("/addUser")
+def addUser():
+	return render_template("adduser.html")
+
+@app.route("/addMovie")
+def addMovie():
+	return render_template("addmovie.html")
+
 if __name__ == "__main__":
     app.run(debug=True)
   	#We made two new changes	

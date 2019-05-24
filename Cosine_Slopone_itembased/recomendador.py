@@ -4,6 +4,7 @@ import time
 import math
 from math import sqrt
 import gc
+import operator
 
 import pickle
 
@@ -12,10 +13,31 @@ from multiprocessing import Pool
 from multiprocessing import Process, Manager
 import itertools
 
+import sqlite3 as lite
+
 
 def intersection(lst1, lst2): 
     return list(set(lst1) & set(lst2)) 
 
+
+data = {}
+productid2name = {}
+promedios = {}
+clavesTotal = []
+
+def loadDataset():
+    global data
+    global productid2name
+    global promedios
+    global clavesTotal
+    recomendador = Recomendador({})
+    data = recomendador.load_obj("ratings_products27m")
+    productid2name = recomendador.load_obj("product_movies27m")
+    promedios = recomendador.load_obj("promedios_users27m")
+    clavesTotal = sorted(data, key=lambda k: len(data[k]), reverse=False)
+
+
+###DESVIACIONES PARA SLOPE ONE
 def scan_desviaciones_files():
     import glob, os
     owd = os.getcwd()
@@ -35,37 +57,6 @@ def scan_desviaciones_files():
 def serialize_obj(obj, name):
     with open('desviaciones_pkl_files/'+ name + '.pkl', 'wb') as f:
         pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
-
-data = {}
-productid2name = {}
-promedios = {}
-clavesTotal = []
-
-def loadDataset():
-    global data
-    global productid2name
-    global promedios
-    recomendador = Recomendador({})
-    data = recomendador.load_obj("ratings_products27m")
-    productid2name = recomendador.load_obj("product_movies27m")
-    promedios = recomendador.load_obj("promedios_users27m")
-
-users2 = {"Amy": {"Taylor Swift": 4, "PSY": 3, "Whitney Houston": 4},
- "Ben": {"Taylor Swift": 5, "PSY": 2},
- "Clara": {"PSY": 3.5, "Whitney Houston": 4},
- "Daisy": {"Taylor Swift": 5, "Whitney Houston": 3}}
-
-users3 = {"David": {"Imagine Dragons": 3, "Daft Punk": 5,
- "Lorde": 4, "Fall Out Boy": 1},
- "Matt": {"Imagine Dragons": 3, "Daft Punk": 4,
- "Lorde": 4, "Fall Out Boy": 1},
- "Ben": {"Kacey Musgraves": 4, "Imagine Dragons": 3,
- "Lorde": 3, "Fall Out Boy": 1},
- "Chris": {"Kacey Musgraves": 4, "Imagine Dragons": 4,
- "Daft Punk": 4, "Lorde": 3, "Fall Out Boy": 1},
- "Tori": {"Kacey Musgraves": 5, "Imagine Dragons": 4,
- "Daft Punk": 5, "Fall Out Boy": 3}}
-
 
 def calcularDesviacion2Items_mp(ratingsItem1, item2):
     ratingsItem2 = data[item2]
@@ -115,6 +106,74 @@ def calcularDesviaciones1Item_mp(item):
     gc.collect()
     #print("total time:", time.time()-t)
 
+#SIMILITUDES PARA COSENO AJUSTADO
+
+def scan_similitudes_files():
+    import glob, os
+    owd = os.getcwd()
+    os.chdir("similitudes_pkl_files/")
+    similitudes_calculadas = []
+    for file in glob.glob("*_similitudes.pkl"):
+        item = file.split("_")[0]
+        similitudes_calculadas.append(item)
+    os.chdir(owd)
+    return similitudes_calculadas
+
+def serialize_obj_similitudes(obj, name):
+    with open('similitudes_pkl_files/'+ name + '.pkl', 'wb') as f:
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+
+
+def calcularSimilitudCosenoAjustado_mp(ratingsItem1, item2):
+
+    tInit = time.time()
+    #ratingsItem1 = data[item1]
+    ratingsItem2 = data[item2]
+    num=0
+    dem1=0
+    dem2=0
+
+    if len(ratingsItem1) < len(ratingsItem2):
+        for user in ratingsItem1:
+            if user in ratingsItem2:
+                num += (ratingsItem1[user] - promedios[user])*(ratingsItem2[user]-promedios[user])
+                dem1 += (ratingsItem1[user] - promedios[user])**2
+                dem2 += (ratingsItem2[user] - promedios[user])**2
+    else:
+        for user in ratingsItem2:
+            if user in ratingsItem1:
+                num += (ratingsItem1[user] - promedios[user])*(ratingsItem2[user]-promedios[user])
+                dem1 += (ratingsItem1[user] - promedios[user])**2
+                dem2 += (ratingsItem2[user] - promedios[user])**2
+    
+    #print("Time to calculate between 2:", time.time()-tInit)
+    if dem1==0 or dem2==0: #Ambas peliculas no tienen usuarios en comun que los hayan calificado
+        similitud = 0
+    else:
+        similitud = num/(sqrt(dem1)*sqrt(dem2))
+        return [item2, similitud] #Cambio, solo retornar los que tienen similitud, modificar las recomendaciones para considerar el caso en que no existe como 0
+    #print("Time to calculate between 2:", time.time()-tInit)
+    #return [item2, similitud]
+
+def calcularSimilitudes1Item_mp(item):
+    similitudes = {}
+    ratingsItem1 = data[item]
+
+    #similitudes.setdefault(item, {})
+    for it in clavesTotal:
+        a = calcularSimilitudCosenoAjustado_mp(ratingsItem1, it)
+        if a:
+            #similitudes.append((item, a[0], a[1]))
+            similitudes[a[0]] = a[1]
+    
+    print("Saving to file")
+    serialize_obj_similitudes(similitudes, item+"_similitudes")
+    del similitudes
+    del ratingsItem1
+    gc.collect()
+    print("saved")
+
+
 
 class Recomendador:
 
@@ -128,6 +187,112 @@ class Recomendador:
 
         if type(data).__name__ == 'dict':
             data = data
+
+    def normalizar(self, rating):
+        minR = 1
+        maxR = 5
+        return (2*(rating-minR)-(maxR-minR))/(maxR - minR)
+    
+    def denormalizar(self, Nrating):
+        minR = 1
+        maxR = 5
+        return (1/2)*((Nrating+1)*(maxR-minR)) + minR
+
+    #reload = 0 carga desde el archivo en la carpeta de pkls, relaod=1, no considera el pkl y lo vuelve a generar
+    def predecirSimilitudCosenoAjustado(self, usuario, itemObj, reload=0):
+        if usuario in data[itemObj]:
+            print("Usuario ya califico dicho item")
+            return data[itemObj][usuario]
+
+        if reload==1: #VOlver a realizar la carga
+            calcularSimilitudes1Item_mp(itemObj)
+
+        resSuccess = self.load_similitudes_item(itemObj)
+
+        if not resSuccess: #si no se encontro el archivo
+            calcularSimilitudes1Item_mp(itemObj)
+            self.load_similitudes_item(itemObj)
+
+        items = data.keys()
+        itemsNoCalificados = []
+        itemsCalificados = []
+        for it in items:
+            if usuario in data[it]:
+                itemsCalificados.append(it)
+                #itemsCalificados[it] = data[it][usuario]
+                #self.calcularSimilitudCosenoAjustado(itemObj, it)
+        num=0
+        dem=0
+        for item in itemsCalificados: #items calificados por el usuario
+            if item in self.desviaciones[itemObj]:
+                num+= self.desviaciones[itemObj][item]*self.normalizar(data[item][usuario])
+                dem+= abs(self.desviaciones[itemObj][item])
+
+        if dem==0: return 0
+        NR = num/dem
+        R = self.denormalizar(NR)
+        return R
+
+    
+    def calcularSimilitudesCosenoTodos_mp(self, read_sim):
+        procesados = []
+        i = 0
+        #claves = list(data.keys())
+        global clavesTotal
+        clavesTotal = sorted(data, key=lambda k: len(data[k]), reverse=False)
+        print("Total de peliculas calificadas:", len(clavesTotal))
+        #claves = list(set(clavesTotal) - set(read_sim)) #similitudes que faltan calcular
+        claves  = [i for i in clavesTotal if not i in read_sim] #similitudes que faltan calcular
+
+        '''
+        filee = open("faltan_calcular.txt","w") 
+        for cl in claves:
+            filee.write(cl+"\n") 
+        filee.close() 
+        '''
+
+        del read_sim
+        n = 12
+        chunks = [claves[i * n:(i + 1) * n] for i in range((len(claves) + n - 1) // n )]
+        print("total de subarrays:", len(chunks))
+        print("Iniciando calculo concurrente")
+        for chunk in chunks:
+            inicial = time.time()
+            number_of_workers = 12
+            with Pool(number_of_workers) as p:
+                p.map(calcularSimilitudes1Item_mp, chunk)
+
+            print("Tiempo para calcular similitudes de 500 peliculas", time.time()-inicial)
+            gc.collect()
+
+
+    def loadUsers2(self, database):
+        for user in database:
+            for item in database[user]:
+                if item not in data:
+                    data[item] = {}
+                data[item][user] = database[user][item]
+    
+
+    def convertProductID2name(self, id):
+        if id in self.productid2name:
+            return self.productid2name[id]
+        else:
+            return id
+
+    def load_similitudes_item(self, item):
+        try:
+            with open('similitudes_pkl_files/' + item + '_similitudes.pkl', 'rb') as f:
+                self.desviaciones[item] = pickle.load(f)
+            return True
+        except:
+                return False
+
+            #self.desviaciones.update(pickle.load(f))
+            #print(self.desviaciones)
+
+
+    ####### slope one ################3
 
     #ready_desv son las distancias y desviaciones ya calculadas
     def calcularDesviacionesTodos_mp(self, read_desv):
@@ -206,8 +371,20 @@ class Recomendador:
         resSuccess = self.load_desviaciones_item(itemObj)
 
         if not resSuccess: #si no se encontro el archivo
+            print("NO se encontro el archivo, volviendo a calcula")
             calcularDesviaciones1Item_mp(itemObj)
             self.load_desviaciones_item(itemObj)
+            self.load_frecuencias_item(itemObj)
+        
+        resSuccessFrec = self.load_frecuencias_item(itemObj)
+        if not resSuccessFrec: #si no se encontro el archivo
+            print("NO se encontro el archivo, volviendo a calcula")
+            calcularDesviaciones1Item_mp(itemObj)
+            self.load_desviaciones_item(itemObj)
+            self.load_frecuencias_item(itemObj)
+
+        print(self.desviaciones[itemObj])
+        print("DIvision")
 
         ####
 
@@ -236,35 +413,27 @@ class Recomendador:
         recomendaciones.sort(key=lambda artistTuple: artistTuple[1], reverse = True)
         #print(self.desviaciones)
         return recomendaciones
-    
 
-    def loadUsers2(self, database):
-        for user in database:
-            for item in database[user]:
-                if item not in data:
-                    data[item] = {}
-                data[item][user] = database[user][item]
-    
-                
-    def convertProductID2name(self, id):
-        if id in self.productid2name:
-            return self.productid2name[id]
-        else:
-            return id
-        
     def load_desviaciones_item(self, item):
-        with open('desviaciones_pkl_files/' + item + "_desviaciones" + '.pkl', 'rb') as f:
-            self.desviaciones.update(pickle.load(f))
+        try:
+            with open('desviaciones_pkl_files/' + item + "_desviaciones" + '.pkl', 'rb') as f:
+                self.desviaciones.update(pickle.load(f))
+                print(self.desviaciones)
+            return True
+        except:
+                return False
+
+        
 
     def load_frecuencias_item(self, item):
-        with open('desviaciones_pkl_files/' + item + "_frecuencias" + '.pkl', 'rb') as f:
-            self.frecuencias.update(pickle.load(f))
-    
-    def calcDesviaciones(self):
-        if self.metric == "coseno_ajustado":
-            self.calcularDesviaciones()
-        elif self.metric == "slope_one":
-            self.calcularDesviacionesSlopeOne()
+        try:
+            with open('desviaciones_pkl_files/' + item + "_frecuencias" + '.pkl', 'rb') as f:
+                self.frecuencias.update(pickle.load(f))
+            return True
+        except:
+                return False
+        
+
     
     def save_obj(self, obj, name ):
         with open('pkl_files/'+ name + '.pkl', 'wb') as f:
@@ -287,16 +456,3 @@ class Recomendador:
 
     def getCalificacionesUsuario(self, user):
         return data[user]
-
-'''
-if __name__ == '__main__':
-    recomendador = Recomendador({}, k=4, metric='coseno', n=10)
-    tInit = time.time()
-    loadDataset()
-    print("time to load data:", time.time()-tInit)
-    t = time.time()
-
-    ready_desv = scan_desviaciones_files()
-    recomendador.calcularDesviacionesTodos_mp(ready_desv)
-
-'''

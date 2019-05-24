@@ -28,24 +28,26 @@
 			          		<select name="itembased_m" style="border-radius: 10px;
 									border: 0px solid white;
 									padding: 10px;
-									margin-right: 10px;
+									margin-right: 10px
 									min-width:240px;
     								min-height: 30px;">
 			          			<option value="slopeone_" selected> Slope One </option>
 			          			<option value="ajustedcosine"> Ajusted Cosine </option>
 			          		</select>
-			          		<input type="text" name="usuario_slopeone" value="{{result[0]}}" placeholder="Usuario" >
-			          		<input type="text" placeholder="Item">
+							  <input type="text" name="usuario_slopeone" value="{{usuario}}" placeholder="Usuario" >
+							  <input type="text" name="item_slopeone" value="{{item}}" placeholder="Item" >
 			          		<button type="submit">Predecir</button>
 			          	</form>
 			        </div>
 			    </div>
 			    <div class="top_rigth">
-			        <p>Katherine Rocío</p>
+			        <p>TBD-CS UNSA 2019</p>
 			    </div>
 			</div>
 		</div>
 	</header>
+
+	Valor predecido: {{predecido}}
 
 	{% for element in result %}
 	<div class="resultados">

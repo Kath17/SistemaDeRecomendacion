@@ -1,0 +1,37 @@
+
+.add{
+	display: flex;
+	width: 100%;
+	justify-content: center;
+}
+
+.added{
+	background-color: #333333;
+	margin-top: 1rem;
+	border-radius: 1rem;
+	padding: 1rem;
+}
+
+.added_1{
+	width: 100%;
+	display: flex;
+	background-color: white;
+	border-radius: 1rem;
+	margin-bottom: 1rem;
+}
+
+.added_1:last-child{
+	margin-bottom: 0rem;
+}
+
+.added_1>div{
+	width: 33.3%;
+	color: black;
+	text-align: center;
+	padding: 1rem;
+	border-right: 1px solid #333333;
+}
+
+.added_1>div:last-child{
+	border-right: 0px solid black;
+}

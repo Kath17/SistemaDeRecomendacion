@@ -1,0 +1,421 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title>Netflix</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="icon" type="image/png" href="{{url_for('static', filename='img/icon.png')}}">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="{{url_for('static',filename='css/normalize.css')}}">
+  <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
+  <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+<body>
+  <!-- TOP MENU -->
+  	<header>
+	  	<div class="center-top">
+	  		<div class="top">
+	  			<div class="top_left">
+	  				<div class="logo"><img src="{{url_for('static', filename='img/logo.png')}}" width="100%"></div>
+	  				<div class="top_menu">
+			          <ul>
+			            <li><a href="#">Inicio</a></li>
+			            <li><a href="#">Series</a></li>
+			            <li><a href="#">Agregados recientemente</a></li>
+			            <li><a href="#">Mi lista</a></li>
+			          </ul>
+			        </div>
+			    </div>
+			    <div class="top_rigth">
+			        <ul>
+			          <li><i class="fas fa-search"></i></li>
+			          <li><i class="fas fa-bell"></i></li>
+			          <li><i class="fas fa-user"></i></li>
+			        </ul>
+			    </div>
+			</div>
+		</div>
+	</header>
+  <!-- TOP MENU -->
+  
+  <!-- RECIENTE -->
+  	<div class="reciente">
+    	<div class="contenedor">
+	      	<div class="fondo_black"></div>
+
+	      	<div class="fondo_img">
+	        	<img src="{{url_for('static', filename='img/reciente_fondo.jpg')}}" width="100%">
+	      	</div>
+
+	      	<div class="flotante">
+	        	<div class="reciente_info">
+		          	<div class="titulo_imagen_reciente">
+		            	<img src="{{url_for('static', filename='img/titulo_imagen_reciente.png')}}" alt="z" width="90%">
+		          	</div>
+		          	<div class="reciente_datos">
+		            	<span>2019</span>
+		            	<span class="cuadrito">7+</span>
+		            	<span>1 temporada</span>
+		          	</div>
+		          	<div class="reciente_ver">
+		            	<span>Ve la temporada 1</span>
+		          	</div>
+		          	<div class="episodio_titulo">
+		            	<span>
+		              		<b>T1:E2</b><span class="transparente">"Operación rescate en la selva (Parte 2)"</span>
+		            	</span>
+		          	</div>
+		          	<div class="sinopsis">
+		            	<span class="transparente">Bear debe viajar más de 40 km por la selva centroamericana para entregar medicamentos a una aldea remota, pero ¡no podrá hacerlo sin ti!</span>
+		          	</div>
+		          	<div class="acciones">
+                  <div class="acc">
+  		            	<a href="#" class="proximo">
+  		              	<span><i class="fas fa-play"></i></span>
+  		              	<span>Proximo Episodio</span>
+  		            	</a>
+                  </div>
+		            	<div class="agregar cuadrito_grande">
+                      <button>
+		              		  <span><i class="fas fa-plus"></i></span>
+		              		  <span>Mi lista</span>
+                      </button>
+		            	</div>
+		            	<div class="calificacion">
+		              		<div class="like"><span><i class="fas fa-thumbs-up"></i></span></div>
+		              		<div class="dislike"><span><i class="fas fa-thumbs-down"></i></span></div>
+		            	</div>
+		          	</div>
+		          	<div class="meta">
+		            	<p>Creado por: </p>
+		            	<a href="https://www.google.com">Fulano</a>,
+		            	<a href="https://www.google.com">Mengano</a>.
+		          	</div>
+	        	</div>
+		        <div class="reciente_menu">
+		            <div>
+		            	<ul>
+		            		<li class="menu_activo">Descripcion General</li>
+			                <li>Episodios</li>
+			                <li>Trailers y mas</li>
+			                <li>Mas similares</li>
+			                <li>Detalles</li>
+		              	</ul>
+		            </div>
+		        </div>
+	      	</div>
+    	</div>
+    
+  	</div>
+  <!-- RECIENTE -->
+
+  <!-- POPULARES EN NETFLIX -->
+    <div class="contain">
+        <div class="slider">
+          <h3>Populares en Netflix</h3>
+          <span onmouseover="scrollEsquerda()" onmouseout="clearScroll()" class="handle handlePrev active">
+            <i class="fa fa-caret-left" aria-hidden="true"></i>
+          </span>
+
+          <div id="scroller" class="row">
+            <div class="row__inner">
+
+              <div class="gui-card">
+                  <div class="gui-card__media">
+                      <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                  </div>
+                  <div class="gui-card__details">
+                      <div class="gui-card__title">
+                        <a class="play_sp" href="index.html"><i class="fas fa-play"></i></a>
+                        <div class="sp_title">Golpe bajo: El juego final</div>
+                        <div id="sp1_dat">
+                          <span class="sp1_dat1">97% de coincidencia</span>
+                          <span class="sp1_dat2">13+</span>
+                          <span class="sp1_dat3">1h 53m</span>
+                        </div>
+                        <div>
+                          <span>Comedia</span><span>Drama</span><span>Ciencia</span>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    <div class="gui-card__title">
+                        <a class="play_sp" href="index.html"><i class="fas fa-play"></i></a>
+                        <div class="sp_title">Golpe bajo: El juego final</div>
+                        <div id="sp1_dat">
+                          <span class="sp1_dat1">97% de coincidencia</span>
+                          <span class="sp1_dat2">13+</span>
+                          <span class="sp1_dat3">1h 53m</span>
+                        </div>
+                        <div>
+                          <span>Comedia</span><span>Drama</span><span>Ciencia</span>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+              <div class="gui-card">
+                <div class="gui-card__media">
+                  <img class="gui-card__img" src="{{url_for('static', filename='img/la_cita_perfecta.jpg')}}" alt=""  />
+                </div>
+                <div class="gui-card__details">
+                  <div class="gui-card__title">
+                    Assassin’s Creed
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          <span onmouseover="scrollDireita()" onmouseout="clearScroll()"  class="handle handleNext active">
+            <i class="fa fa-caret-right" aria-hidden="true"></i>
+          </span>
+        </div>
+
+    </div>
+
+  <!-- POPULARES EN NETFLIX -->
+
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="sub-footer">
+      <div class="social">
+        <a href="https://www.google.com"><i class="fab fa-facebook"></i></a>
+        <a href="https://www.google.com"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.google.com"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.google.com"><i class="fab fa-youtube"></i></a>
+      </div>
+      <div class="extra">
+          <ul>
+            <li><a href="https://www.google.com">Audio y subtitulos</a></li>
+            <li><a href="https://www.google.com">Audio descriptivo</a></li>
+            <li><a href="https://www.google.com">Centro de ayuda</a></li>
+            <li><a href="https://www.google.com">Tajetas de regalos</a></li>
+            <li><a href="https://www.google.com">Prensa</a></li>
+            <li><a href="https://www.google.com">Relaciones con inversionistas</a></li>
+            <li><a href="https://www.google.com">Empleo</a></li>
+            <li><a href="https://www.google.com">Terminos de uso</a></li>
+            <li><a href="https://www.google.com">Tajetas de regalos</a></li>
+            <li><a href="https://www.google.com">Prensa</a></li>
+            <li><a href="https://www.google.com">Audio descriptivo</a></li>
+            <li><a href="https://www.google.com">Centro de ayuda</a></li>
+          </ul>
+      </div>
+      <div><a href="https://www.google.com" class="cuadrito_codigo">Codigo de Servicio</a></div>
+      <div class="copy">© 1997-2019 Netflix, Inc.</div>
+    </div>
+  </div>
+  <!-- FOOTER -->
+
+
+
+
+  <script src="../js/vendor/modernizr-3.7.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script>window.jQuery || document.write('<script src="../js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+  <script src="../js/plugins.js"></script>
+  <script src="../js/main.js"></script>
+
+  <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+  <script>
+    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
+    ga('create', 'UA-XXXXX-Y', 'auto'); ga('set','transport','beacon'); ga('send', 'pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+</body>
+
+</html>

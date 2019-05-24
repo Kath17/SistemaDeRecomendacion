@@ -1,0 +1,36 @@
+
+
+html{
+	background-image: url(../img/fondo_welcome.jpg);
+}
+
+body{
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+.img-logo{
+	width: 15%;
+}
+
+.logo{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.top-contenedor{
+	display: flex;
+	align-items: center;
+	position: relative;
+}
+
+.login{
+	position: absolute;
+	right: 1rem;
+}
+
+.login>a{
+	background-color: red;
+	padding: 10px 30px;
+	border-radius: 5px;
+}

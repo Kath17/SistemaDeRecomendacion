@@ -7,13 +7,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<link rel="manifest" href="site.webmanifest">
-	<link rel="icon" type="image/png" href="{{url_for('static', filename='img/icon.png')}}">
+	<link rel="icon" type="image/png" href="/static/img/icon.png">
 	<!-- Place favicon.ico in the root directory -->
 
-	<link rel="stylesheet" href="{{url_for('static', filename='css/normalize.css')}}">
-	<link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
-	<link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
-	<link rel="stylesheet" href="{{url_for('static', filename='css/ranking.css')}}">
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<link rel="stylesheet" href="/static/css/normalize.css">
+	<link rel="stylesheet" href="/static/css/main.css">
+	<link rel="stylesheet" href="/static/css/index.css">
+	<link rel="stylesheet" href="/static/css/ranking.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 	<meta name="theme-color" content="#fafafa">
 </head>
@@ -22,54 +23,56 @@
 	  	<div class="center-top">
 	  		<div class="top">
 	  			<div class="top_left">
-	  				<div class="logo"><a href="/"><img src="{{url_for('static', filename='img/logo.png')}}" width="100%"></a></div>
+	  				<div class="logo"><a href="/"><img src="/static/img/logo.png" width="100%"></a></div>
 	  				<div class="top_menu" style="margin-left: 70px;">
-			          	<form action="{{ url_for('slopeOne') }}" method="post">
+			          	<form action="/slopeOne" method="post">
 			          		<select name="itembased_m" style="border-radius: 10px;
 									border: 0px solid white;
 									padding: 10px;
-									margin-right: 10px
+									margin-right: 10px;
 									min-width:240px;
     								min-height: 30px;">
-			          			<option value="slopeone" selected> Slope One </option>
+			          			<option value="slopeone_" selected> Slope One </option>
 			          			<option value="ajustedcosine"> Ajusted Cosine </option>
 			          		</select>
-							  <input type="text" name="usuario_slopeone" value="{{usuario}}" placeholder="Usuario" >
-							  <input type="text" name="item_slopeone" value="{{item}}" placeholder="Item" >
-			          		<button type="submit">Predecir</button>
+			          		<input type="text" name="usuario_slopeone" placeholder="Usuario" >
+			          		<input type="text" id ="id_movie" placeholder="Item">
+			          		<!--<button id="searchButton" >Predecir</button>-->
+			          		<input id="searchButton" type="button" value ="Predecir" style="	color: white;
+																			background-color: #e50914;
+																			width: 5rem;
+																			cursor: pointer;
+																			border-radius: 10px;
+																			border: 0px solid white;
+																			padding: 10px;
+																			margin-right: 10px;"/>
 			          	</form>
 			        </div>
 			    </div>
 			    <div class="top_rigth">
-			        <p>TBD-CS UNSA 2019</p>
+			        <p>Katherine Rocío</p>
 			    </div>
 			</div>
 		</div>
 	</header>
 
-	{% if tiempoCalculo!='' %} 
-	<div style="text-align:center">
-		Valor predecido: {{predecido}}, en tiempo: {{tiempoCalculo}} ms
-	</div>
-	{% endif %} 
 
-	{% for element in result %}
 	<div class="resultados">
 		<div class="resultados_contenedor" style="margin-top: 30px;">
-		
+
 			<div class="r1">
-				<div class="r1_imagen"><img src="{{url_for('static', filename='img/aliens.jpg')}}" alt="">
+				<div class="r1_imagen"><img src="/static/img/aliens.jpg" alt="">
 				</div>
 				<div class="r1_info">
-					<div><span class="r1_nombre"><h2>{{element}}</h2></span></div>
+					<div><span class="r1_nombre"><h2>Firulais</h2></span></div>
 					<div class="r1_puntaje">
 						<span><i class="fas fa-star">7.1</i></span>
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="r2">
-				<div class="r2_imagen"><img src="{{url_for('static', filename='img/Moonlight-poster.jpg')}}" alt=""></div>
+				<div class="r2_imagen"><p id="results"> </p></div>
 				<div class="r2_info">
 					<div><span class="r2_nombre"><h2>Moonligth</h2></span></div>
 					<div class="r2_puntaje">
@@ -80,7 +83,95 @@
 
 		</div>
 	</div>
-	{% endfor %}
-	
+
+	<div class="resultados">
+		<div class="resultados_contenedor" style="margin-top: 30px;">
+
+			<div class="r1">
+				<div class="r1_imagen"><img src="/static/img/aliens.jpg" alt="">
+				</div>
+				<div class="r1_info">
+					<div><span class="r1_nombre"><h2>abc</h2></span></div>
+					<div class="r1_puntaje">
+						<span><i class="fas fa-star">7.1</i></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="r2">
+				<div class="r2_imagen"><p id="results"> </p></div>
+				<div class="r2_info">
+					<div><span class="r2_nombre"><h2>Moonligth</h2></span></div>
+					<div class="r2_puntaje">
+						<span><i class="fas fa-star">6.2</i></span>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="resultados">
+		<div class="resultados_contenedor" style="margin-top: 30px;">
+
+			<div class="r1">
+				<div class="r1_imagen"><img src="/static/img/aliens.jpg" alt="">
+				</div>
+				<div class="r1_info">
+					<div><span class="r1_nombre"><h2>cde</h2></span></div>
+					<div class="r1_puntaje">
+						<span><i class="fas fa-star">7.1</i></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="r2">
+				<div class="r2_imagen"><p id="results"> </p></div>
+				<div class="r2_info">
+					<div><span class="r2_nombre"><h2>Moonligth</h2></span></div>
+					<div class="r2_puntaje">
+						<span><i class="fas fa-star">6.2</i></span>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+
+	<script type="text/javascript">
+        const API_KEY ="43223a67169279b9b525638821d593b0";
+
+        $('#searchButton').click(function() {
+            'use strict';
+
+            var id_peli = $('#id_movie').val();
+            var imageUrl = "https://api.themoviedb.org/3/find/tt"+id_peli+'?api_key='+API_KEY+"&external_source=imdb_id";
+            console.log(imageUrl);
+
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                // URL a la que se enviará la solicitud Ajax
+                url: imageUrl,
+            })
+             .done(function( data, textStatus, jqXHR ) {
+                 if ( console && console.log ) {
+                     console.log(data.movie_results[0].poster_path)
+                     console.log( "La solicitud se ha completado correctamente." );
+
+                     $('#results').append('<img src="' + "http://image.tmdb.org/t/p/w154"+data.movie_results[0].poster_path + '" />');
+                 }
+             })
+             .fail(function( jqXHR, textStatus, errorThrown ) {
+                 if ( console && console.log ) {
+                     console.log( "La solicitud a fallado: " +  textStatus);
+                 }
+            });
+            return imageUrl;
+        });
+    </script>
+
 </body>
 </html>

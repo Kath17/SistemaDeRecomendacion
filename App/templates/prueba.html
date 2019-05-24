@@ -1,97 +1,177 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Flask Tutorial</title>
-  </head>
-  <body>
-    <h1> My First Try Using Flask </h1>
-    <p> Flask is Fun </p>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Netflix</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Image example -->
-    <img src="https://image.tmdb.org/t/p/w185/l1yltvzILaZcx2jYvc5sEMkM7Eh.jpg" alt="Italian Trulli">
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="icon" type="image/png" href="/static/img/icon.png">
+	<!-- Place favicon.ico in the root directory -->
 
-    <div >
-    	<h1>My Cart</h1>
-		<div id="cart">
-		    <h2>Cart Items</h2>
-		    <ul id="output">
-                
-		    </ul>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<link rel="stylesheet" href="/static/css/normalize.css">
+	<link rel="stylesheet" href="/static/css/main.css">
+	<link rel="stylesheet" href="/static/css/index.css">
+	<link rel="stylesheet" href="/static/css/ranking.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+	<meta name="theme-color" content="#fafafa">
+</head>
+<body>
+	<header>
+	  	<div class="center-top">
+	  		<div class="top">
+	  			<div class="top_left">
+	  				<div class="logo"><a href="/"><img src="/static/img/logo.png" width="100%"></a></div>
+	  				<div class="top_menu" style="margin-left: 70px;">
+			          	<form action="/slopeOne" method="post">
+			          		<select name="itembased_m" style="border-radius: 10px;
+									border: 0px solid white;
+									padding: 10px;
+									margin-right: 10px;
+									min-width:240px;
+    								min-height: 30px;">
+			          			<option value="slopeone_" selected> Slope One </option>
+			          			<option value="ajustedcosine"> Ajusted Cosine </option>
+			          		</select>
+			          		<input type="text" name="usuario_slopeone" placeholder="Usuario" >
+			          		<input type="text" id ="id_movie" placeholder="Item">
+			          		<!--<button id="searchButton" >Predecir</button>-->
+			          		<input id="searchButton" type="button" value ="Predecir" style="	color: white;
+																			background-color: #e50914;
+																			width: 5rem;
+																			cursor: pointer;
+																			border-radius: 10px;
+																			border: 0px solid white;
+																			padding: 10px;
+																			margin-right: 10px;"/>
+			          	</form>
+			        </div>
+			    </div>
+			    <div class="top_rigth">
+			        <p>Katherine Rocío</p>
+			    </div>
+			</div>
 		</div>
-    </div>
+	</header>
 
-    <!--<script src="{{url_for('static',filename='js/key.js')}}"></script>-->
-    <script>
-        /*************
-        SAMPLE URLS
-        
-        1. To get the config data like image base urls
-        https://api.themoviedb.org/3/configuration?api_key=<APIKEY>
-        
-        2. To fetch a list of movies based on a keyword
-        https://api.themoviedb.org/3/search/movie?api_key=<APIKEY>&query=<keyword>
-        
-        3. To fetch more details about a movie
-        https://api.themoviedb.org/3/movie/<movie-id>?api_key=<APIKEY>
-        *************/
-        //const APIKEY is inside key.js
 
-        const APIKEY = "43223a67169279b9b525638821d593b0";
-        let baseURL = 'https://api.themoviedb.org/3/';
-        let configData = null;
-        let baseImageURL = null;
-        
-        let getConfig = function () {
-            let url = "".concat(baseURL, 'configuration?api_key=', APIKEY); 
-            fetch(url)
-            .then((result)=>{
-                return result.json();
+	<div class="resultados">
+		<div class="resultados_contenedor" style="margin-top: 30px;">
+
+			<div class="r1">
+				<div class="r1_imagen"><img src="/static/img/aliens.jpg" alt="">
+				</div>
+				<div class="r1_info">
+					<div><span class="r1_nombre"><h2>Firulais</h2></span></div>
+					<div class="r1_puntaje">
+						<span><i class="fas fa-star">7.1</i></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="r2">
+				<div class="r2_imagen"><p id="results"> </p></div>
+				<div class="r2_info">
+					<div><span class="r2_nombre"><h2>Moonligth</h2></span></div>
+					<div class="r2_puntaje">
+						<span><i class="fas fa-star">6.2</i></span>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="resultados">
+		<div class="resultados_contenedor" style="margin-top: 30px;">
+
+			<div class="r1">
+				<div class="r1_imagen"><img src="/static/img/aliens.jpg" alt="">
+				</div>
+				<div class="r1_info">
+					<div><span class="r1_nombre"><h2>abc</h2></span></div>
+					<div class="r1_puntaje">
+						<span><i class="fas fa-star">7.1</i></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="r2">
+				<div class="r2_imagen"><p id="results"> </p></div>
+				<div class="r2_info">
+					<div><span class="r2_nombre"><h2>Moonligth</h2></span></div>
+					<div class="r2_puntaje">
+						<span><i class="fas fa-star">6.2</i></span>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="resultados">
+		<div class="resultados_contenedor" style="margin-top: 30px;">
+
+			<div class="r1">
+				<div class="r1_imagen"><img src="/static/img/aliens.jpg" alt="">
+				</div>
+				<div class="r1_info">
+					<div><span class="r1_nombre"><h2>cde</h2></span></div>
+					<div class="r1_puntaje">
+						<span><i class="fas fa-star">7.1</i></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="r2">
+				<div class="r2_imagen"><p id="results"> </p></div>
+				<div class="r2_info">
+					<div><span class="r2_nombre"><h2>Moonligth</h2></span></div>
+					<div class="r2_puntaje">
+						<span><i class="fas fa-star">6.2</i></span>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+
+	<script type="text/javascript">
+        const API_KEY ="43223a67169279b9b525638821d593b0";
+
+        $('#searchButton').click(function() {
+            'use strict';
+
+            var id_peli = $('#id_movie').val();
+            var imageUrl = "https://api.themoviedb.org/3/find/tt"+id_peli+'?api_key='+API_KEY+"&external_source=imdb_id";
+            console.log(imageUrl);
+
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                // URL a la que se enviará la solicitud Ajax
+                url: imageUrl,
             })
-            .then((data)=>{
-                baseImageURL = data.images.secure_base_url;
-                configData = data.images;
-                console.log('config:', data);
-                console.log('config fetched');
-                runSearch('jaws')
-            })
-            .catch(function(err){
-                alert(err);
+             .done(function( data, textStatus, jqXHR ) {
+                 if ( console && console.log ) {
+                     console.log(data.movie_results[0].poster_path)
+                     console.log( "La solicitud se ha completado correctamente." );
+
+                     $('#results').append('<img src="' + "http://image.tmdb.org/t/p/w154"+data.movie_results[0].poster_path + '" />');
+                 }
+             })
+             .fail(function( jqXHR, textStatus, errorThrown ) {
+                 if ( console && console.log ) {
+                     console.log( "La solicitud a fallado: " +  textStatus);
+                 }
             });
-        }
-        
-        let runSearch = function (keyword) {
-            let url = ''.concat(baseURL, 'search/movie?api_key=', APIKEY, '&query=', keyword);
-            fetch(url)
-            .then(result=>result.json())
-            .then((data)=>{
-                //process the returned data
-                document.getElementById('output').innerHTML = JSON.stringify(data, null, 4);
-                var cartItemsList = document.getElementById("cartItemsList");
-                //work with results array...
-                
-            })
-        }
-        
-        document.addEventListener('DOMContentLoaded', getConfig);
-        /*******************************
-        SAMPLE SEARCH RESULTS DATA
-        { "vote_count": 2762, 
-            "id": 578, 
-            "video": false, 
-            "vote_average": 7.5, 
-            "title": "Jaws", 
-            "popularity": 16.273358, 
-            "poster_path": "/l1yltvzILaZcx2jYvc5sEMkM7Eh.jpg", 
-            "original_language": "en", 
-            "original_title": "Jaws", 
-            "genre_ids": [ 27, 53, 12 ], 
-            "backdrop_path": "/slkPgAt1IQgxZXNrazEcOzhAK8f.jpg", 
-            "adult": false, 
-            "overview": "An insatiable great white shark terrorizes the townspeople of Amity Island, The police chief, an oceanographer and a grizzled shark hunter seek to destroy the bloodthirsty beast.", 
-            "release_date": "1975-06-18" 
-        }
-        *******************************/
+            return imageUrl;
+        });
     </script>
-  </body>
+
+</body>
 </html>

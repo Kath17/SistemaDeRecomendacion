@@ -24,17 +24,17 @@
 	  			<div class="top_left">
 	  				<div class="logo"><a href="/"><img src="{{url_for('static', filename='img/logo.png')}}" width="100%"></a></div>
 	  				<div class="top_menu" style="margin-left: 70px;">
-			          	<form action="#">
-			          		<select style="border-radius: 10px;
+			          	<form action="{{ url_for('slopeOne') }}" method="post">
+			          		<select name="itembased_m" style="border-radius: 10px;
 									border: 0px solid white;
 									padding: 10px;
 									margin-right: 10px;
 									min-width:240px;
     								min-height: 30px;">
-			          			<option value="slopeone" selected> Slope One </option>
+			          			<option value="slopeone_" selected> Slope One </option>
 			          			<option value="ajustedcosine"> Ajusted Cosine </option>
 			          		</select>
-			          		<input type="text" placeholder="Usuario">
+			          		<input type="text" name="usuario_slopeone" value="{{result[0]}}" placeholder="Usuario" >
 			          		<input type="text" placeholder="Item">
 			          		<button type="submit">Predecir</button>
 			          	</form>
@@ -48,18 +48,20 @@
 	</header>
 
 	<div class="resultados">
-		<div class="resultados_contenedor">
+		{% for element in result %}
+		<div class="resultados_contenedor" style="margin-top: 30px;">
+		
 			<div class="r1">
 				<div class="r1_imagen"><img src="{{url_for('static', filename='img/aliens.jpg')}}" alt="">
 				</div>
 				<div class="r1_info">
-					<div><span class="r1_nombre"><h2>Aliens</h2></span></div>
+					<div><span class="r1_nombre"><h2>{{element}}</h2></span></div>
 					<div class="r1_puntaje">
 						<span><i class="fas fa-star">7.1</i></span>
 					</div>
 				</div>
 			</div>
-
+			
 			<div class="r2">
 				<div class="r2_imagen"><img src="{{url_for('static', filename='img/Moonlight-poster.jpg')}}" alt=""></div>
 				<div class="r2_info">
@@ -70,7 +72,8 @@
 				</div>
 			</div>
 
-		</div>		
+		</div>
+		{% endfor %}
 	</div>
 	
 </body>

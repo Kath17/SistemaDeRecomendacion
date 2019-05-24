@@ -1,4 +1,4 @@
-from flask import Flask, render_template             
+from flask import Flask, render_template, request           
 
 app = Flask(__name__)
 
@@ -14,9 +14,14 @@ def salvador():
 def ranking():
     return render_template("ranking.html")
 
-@app.route("/slopeOne")
+@app.route("/slopeOne",methods=['GET','POST'])
 def slopeOne():
-    return render_template("slopeOne.html")
+	#render_template("slopeOne.html")
+	#user = request.form['usuario_slopeone']
+	#print(user)
+	#return render_template("slopeOne.html")
+	temp = ["Firulais","abc","cde"]
+	return render_template("slopeOne.html",result = temp)
 
 @app.route("/addUser")
 def addUser():

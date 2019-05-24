@@ -31,7 +31,7 @@
 									margin-right: 10px
 									min-width:240px;
     								min-height: 30px;">
-			          			<option value="slopeone_" selected> Slope One </option>
+			          			<option value="slopeone" selected> Slope One </option>
 			          			<option value="ajustedcosine"> Ajusted Cosine </option>
 			          		</select>
 							  <input type="text" name="usuario_slopeone" value="{{usuario}}" placeholder="Usuario" >
@@ -47,10 +47,11 @@
 		</div>
 	</header>
 
+	{% if tiempoCalculo!='' %} 
 	<div style="text-align:center">
 		Valor predecido: {{predecido}}, en tiempo: {{tiempoCalculo}} ms
 	</div>
-	
+	{% endif %} 
 
 	{% for element in result %}
 	<div class="resultados">

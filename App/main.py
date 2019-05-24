@@ -7,6 +7,7 @@ import cosenoajustado
 import slopeone
 
 recomendador = cosenoajustado.Recomendador({}, k=4, metric='coseno', n=10)
+recomendadorSlopeone = slopeone.Recomendador({})
 tInit = time.time()
 
 import os
@@ -35,17 +36,21 @@ def ranking():
 def slopeOne():
 	#render_template("slopeOne.html")
 	predecido = ''
-
+	tiempoCalculo = ''
 	if request.method == 'POST':
 		usuario = request.form['usuario_slopeone']
 		item = request.form['item_slopeone']
+		metodo = request.form["itembased_m"]
+
 		print(usuario)
-		#usuario = '1'
-		#item = '3'
 		t = time.time()
 		owd = os.getcwd()
 		os.chdir("../Cosine_Slopone_itembased/")
-		predecido = recomendador.predecirSimilitudCosenoAjustado(usuario, item, reload=0)
+
+		if metodo=="slopeone":
+			predecido = recomendador.predecirSimilitudCosenoAjustado(usuario, item, reload=0)
+		else:
+			predecido = recomendadorSlopeone.recomendacionesSlopeOneItem(usuario, item, reload=0)
 		os.chdir(owd)
 		tiempoCalculo = time.time()-t
 		print("Time to calculate similitud:", tiempoCalculo)

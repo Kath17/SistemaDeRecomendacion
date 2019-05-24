@@ -158,6 +158,8 @@ def calcularSimilitudCosenoAjustado_mp(ratingsItem1, item2):
         similitud = 0
     else:
         similitud = num/(sqrt(dem1)*sqrt(dem2))
+        if similitud>1:
+            similitud=1
         return [item2, similitud] #Cambio, solo retornar los que tienen similitud, modificar las recomendaciones para considerar el caso en que no existe como 0
     #print("Time to calculate between 2:", time.time()-tInit)
     #return [item2, similitud]
@@ -194,7 +196,24 @@ class Recomendador:
 
         if type(data).__name__ == 'dict':
             data = data
+    
+    def agregarRating(self, userId, itemId, rating):
+        
+        for item in clavesTotal:
+            if userId in data[item]: #peliculas que el usuario califico
+                self.load_desviaciones_item(item)
+                nuevaDesviacion = (self.desviaciones[item][itemId]*self.frecuencias[item][itemId]*(rating-data[item][userId]))/(self.frecuencias[item][itemId] + 1)
+                self.desviaciones[item][itemId] = nuevaDesviacion
+                self.frecuencias[item][itemId] += 1
 
+                serialize_obj(desviaciones, item+"_desviaciones")
+                serialize_obj(frecuencias, item+"_frecuencias")
+
+                del self.desviaciones
+                del self.frecuencias
+
+        calcularDesviaciones1Item_mp(itemId)
+    
     def getImdbIdByMovieId(self, itemId):
         return links["imdbId"][int(itemId)]
 
@@ -207,6 +226,39 @@ class Recomendador:
         minR = 1
         maxR = 5
         return (1/2)*((Nrating+1)*(maxR-minR)) + minR
+
+    def getKPrimerosCosenoByItem(self, item, K):
+        resSuccess = self.load_similitudes_item(item)
+
+        #if not resSuccess: #si no se encontro el archivo
+        calcularSimilitudes1Item_mp(item)
+        self.load_similitudes_item(item)
+
+        similitudes_item = self.desviaciones[item]
+        similitudes_item = {int(k):v for k,v in similitudes_item.items()}
+        df = pd.DataFrame(similitudes_item.items())
+        sorted_values = df.sort_values(by=[1,0], ascending=[False,True])
+        similitudes_item = sorted_values.agg(list,1).tolist()
+
+        print(similitudes_item)
+        return similitudes_item[:int(K)]
+
+    def getKPrimerosSlopeOneByItem(self, item, K):
+        resSuccess = self.load_desviaciones_item(item)
+
+        if not resSuccess: #si no se encontro el archivo
+            calcularDesviaciones1Item_mp(item)
+            self.load_desviaciones_item(item)
+            self.load_frecuencias_item(item)
+
+        desviaciones_item = self.desviaciones[item]
+        desviaciones_item = {int(k):v for k,v in desviaciones_item.items()}
+        df = pd.DataFrame(desviaciones_item.items())
+        sorted_values = df.sort_values(by=[1,0], ascending=[False,True])
+        desviaciones_item = sorted_values.agg(list,1).tolist()
+
+        return desviaciones_item[:int(K)]
+
 
     #reload = 0 carga desde el archivo en la carpeta de pkls, relaod=1, no considera el pkl y lo vuelve a generar
     def predecirSimilitudCosenoAjustado(self, usuario, itemObj, reload=0):

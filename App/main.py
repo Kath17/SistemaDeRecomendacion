@@ -86,6 +86,29 @@ def addUser():
 def addMovie():
 	return render_template("addmovie.html")
 
+@app.route("/mostrarKPrimeros", methods=['GET','POST'])
+def mostrarKPrimeros():
+	predecido = ''
+	tiempoCalculo = ''
+	imdbId = ''
+	mensaje = ''
+	resultados = ""
+	if request.method == 'POST':
+		item_slopeone = request.form["item_slopeone"]
+		k_slopeone = request.form["k_slopeone"]
+		metodo = request.form["itembased_m"]
+
+		owd = os.getcwd()
+		os.chdir("../Cosine_Slopone_itembased/")
+
+		if metodo!="slopeone":
+			resultados = recSystem.getKPrimerosCosenoByItem(item_slopeone, k_slopeone)
+		else:
+			resultados = recSystem.getKPrimerosSlopeOneByItem(item_slopeone, k_slopeone)
+		
+		os.chdir(owd)
+	return render_template("cargarFila.html", resultados=resultados)
+
 if __name__ == "__main__":
     app.run(debug=True)
   	#We made two new changes	

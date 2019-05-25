@@ -84,6 +84,11 @@ def addUser():
 
 @app.route("/addMovie")
 def addMovie():
+	if request.method == 'POST':
+		usuario = request.form['userid']
+		item = request.form['itemid']
+		rating = request.form["rating"]
+		recSystem.agregarRating(userId, itemId, rating)
 	return render_template("addmovie.html")
 
 @app.route("/mostrarKPrimeros", methods=['GET','POST'])

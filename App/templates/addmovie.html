@@ -26,7 +26,7 @@
 	  				<div class="logo"><a href="/"><img src="{{url_for('static', filename='img/logo.png')}}" width="100%"></a></div>
 			    </div>
 			    <div class="top_rigth">
-			        <p>Katherine Rocio</p>
+			        <p>CS UNSA TBD 2019</p>
 			    </div>
 			</div>
 		</div>
@@ -35,10 +35,10 @@
 	<div class="add">
 		<div class="add_contenedor">
 			<div class="add_form">
-				<form action="#">
-					<input type="text" value="Katherine Rocio">
-					<input type="text" placeholder="Pelicula">
-					<input type="text" placeholder="Puntaje">
+				<form action="/addMovie">
+					<input type="text" name="userid" value="1">
+					<input type="text" name="itemid" placeholder="Pelicula">
+					<input type="text" name="rating" placeholder="Puntaje">
 					<button type="submit">Agregar</button>
 				</form>
 			</div>

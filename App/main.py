@@ -85,6 +85,7 @@ def addUser():
 @app.route("/addMovie")
 def addMovie():
 	if request.method == 'POST':
+		print("add movie post")
 		usuario = request.form['userid']
 		item = request.form['itemid']
 		rating = request.form["rating"]

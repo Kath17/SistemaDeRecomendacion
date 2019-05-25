@@ -495,7 +495,7 @@ class Recomendador:
         try:
             with open('desviaciones_pkl_files/' + item + "_desviaciones" + '.pkl', 'rb') as f:
                 self.desviaciones.update(pickle.load(f))
-                print(self.desviaciones)
+                #print(self.desviaciones)
             return True
         except:
                 return False

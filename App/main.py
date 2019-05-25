@@ -82,14 +82,17 @@ def slopeOne():
 def addUser():
 	return render_template("adduser.html")
 
-@app.route("/addMovie")
+@app.route("/addMovie", methods=['GET','POST'])
 def addMovie():
 	if request.method == 'POST':
 		print("add movie post")
 		usuario = request.form['userid']
 		item = request.form['itemid']
 		rating = request.form["rating"]
-		recSystem.agregarRating(userId, itemId, rating)
+		owd = os.getcwd()
+		os.chdir("../Cosine_Slopone_itembased/")
+		recSystem.agregarRating(usuario, item, rating)
+		os.chdir(owd)
 	return render_template("addmovie.html")
 
 @app.route("/mostrarKPrimeros", methods=['GET','POST'])

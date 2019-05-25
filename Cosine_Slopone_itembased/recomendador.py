@@ -198,21 +198,36 @@ class Recomendador:
             data = data
     
     def agregarRating(self, userId, itemId, rating):
-        
+        if itemId not in data:
+            data[itemId] = {}
+        rating = float(rating)
+        data[itemId][userId] = rating
+        print("Nuevas desviación y frecuencias:")
         for item in clavesTotal:
+            #print("item:", item)
             if userId in data[item]: #peliculas que el usuario califico
-                self.load_desviaciones_item(item)
+                resSuccess = self.load_desviaciones_item(item)
+                if not resSuccess:
+                    print("No encuentra archivo")
+                    continue
+                self.load_frecuencias_item(item)
+                '''
+                x = self.desviaciones[item]
+                a = self.desviaciones[item][itemId]
+                b = self.frecuencias[item][itemId]
+                '''
                 nuevaDesviacion = (self.desviaciones[item][itemId]*self.frecuencias[item][itemId]*(rating-data[item][userId]))/(self.frecuencias[item][itemId] + 1)
                 self.desviaciones[item][itemId] = nuevaDesviacion
                 self.frecuencias[item][itemId] += 1
 
-                serialize_obj(desviaciones, item+"_desviaciones")
-                serialize_obj(frecuencias, item+"_frecuencias")
+                serialize_obj(self.desviaciones, item+"_desviaciones2")
+                serialize_obj(self.frecuencias, item+"_frecuencias2")
 
+                print(self.desviaciones[item][itemId], " - ", self.frecuencias[item][itemId])
                 del self.desviaciones
                 del self.frecuencias
 
-        calcularDesviaciones1Item_mp(itemId)
+        #calcularDesviaciones1Item_mp(itemId)
     
     def getImdbIdByMovieId(self, itemId):
         return links["imdbId"][int(itemId)]

@@ -36,7 +36,7 @@ def home():
     #toRecommend = recSystem.recomendarKItems(usuario,k_value)
     #print(toRecommend)
     os.chdir(owd)
-    return render_template("index.html",result = ListaVistas, usuario = usuario, ListaIMDB = ListaIMDB)
+    return render_template("index.html",result = ListaVistas[:3], usuario = usuario, ListaIMDB = ListaIMDB)
 
 @app.route("/prueba")
 def salvador():

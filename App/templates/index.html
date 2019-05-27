@@ -393,7 +393,7 @@
               {%for i in result%}
 
                 <div class="gui-card">
-                  <div class="gui-card__media" id="result"+"{{i[1]}}">
+                  <div class="gui-card__media" id="{{ "result" ~ i[1] }}">
                     <!--<div class="gui-card__img"><p id="results"> </p></div>-->
                   </div>
                   <div class="gui-card__details">
@@ -401,7 +401,7 @@
                       <div class="gui-card__title">
                         <!--<a class="play_sp" href="index.html"><i class="fas fa-play"></i></a>-->
                         <!-- <h2 id="title">{{i[1]}}</h2> -->
-                        <div class="sp_title"> <h2 id="title"+"{{i[1]}}"></h2></div>
+                        <div class="sp_title"> <h2 id="{{ "title" ~ i[1] }}"></h2></div>
                         <div id="sp1_dat">
                           <span class="sp1_dat1">{{i[0]*100/5}}% de coincidencia</span>
                           <span class="sp1_dat2">13+</span>
@@ -423,6 +423,7 @@
                     var titlej = "title" + "{{i[1]}}"
                     console.log(resultj);
                     console.log(titlej)
+                    var title;
                     //var id_peli = "{{ListaIMDB[i[1]]}}";
                     //var id_peli = "0114709"
                     var imageUrl = "https://api.themoviedb.org/3/find/tt"+"0114709"+'?api_key='+"43223a67169279b9b525638821d593b0"+"&external_source=imdb_id";
@@ -439,7 +440,9 @@
                           console.log( "La solicitud se ha completado correctamente." );
                           title = data.movie_results[0].title;
                           $("#"+titlej).html(title);
-                          $('#'+resultj).append('<img class="gui-card__img" src="' + "http://image.tmdb.org/t/p/w500"+data.movie_results[0].backdrop_path + '" alt=""  />');
+                          console.log(title)
+                          $('#'+resultj).html('<img class="gui-card__img" src="' + "http://image.tmdb.org/t/p/w500"+data.movie_results[0].backdrop_path +'" alt=""/>');
+                          console.log('#'+resultj)
                         }
                       })
                       .fail(function( jqXHR, textStatus, errorThrown ) {

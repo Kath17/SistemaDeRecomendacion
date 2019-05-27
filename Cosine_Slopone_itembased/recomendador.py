@@ -280,13 +280,21 @@ class Recomendador:
         self.save_obj(data, "ratings_products27m2")
         print("Nuevas desviación y frecuencias:")
         inicial = time.time()
+        ######
+        self.load_desviaciones_item(itemID)
+        self.load_frecuencias_item(itemId)
+        desviacionesOriginales = self.desviaciones[itemId]
+        frecuenciasOriginales = self.frecuencias[itemId]
+        del self.desviaciones
+        del self.frecuencias
+        ######
         for item in clavesTotal:
             #print("item:", item)
             if userId in data[item]: #peliculas que el usuario califico
-                '''
+                ####
                 if item==itemId: #Es el mismo item
                     continue
-                '''
+                ####
                 resSuccess = self.load_desviaciones_item(item)
                 if not resSuccess:
                     print("No encuentra archivo")
@@ -296,6 +304,10 @@ class Recomendador:
                 self.desviaciones[item][itemId] = nuevaDesviacion
                 self.frecuencias[item][itemId] += 1
 
+                ############
+                desviacionesOriginales[itemID][item] = (-1)*nuevaDesviacion
+                ############
+
                 serialize_obj(self.desviaciones, item+"_desviaciones2")
                 serialize_obj(self.frecuencias, item+"_frecuencias2")
 
@@ -304,7 +316,9 @@ class Recomendador:
                 del self.frecuencias
                 self.desviaciones = {}
                 self.frecuencias = {}
-
+        frecuenciasOriginales[itemId][item] += 1
+        serialize_obj(desviacionesOriginales, itemId+"_desviaciones2")
+        serialize_obj(frecuenciasOriginales, itemId+"_frecuencias2")
         self.agregarRatingCosenoAjustado(userId, itemId, rating)
         print("Tiempo para calcular matriz de similitud y desviaciones", time.time()-inicial)
 

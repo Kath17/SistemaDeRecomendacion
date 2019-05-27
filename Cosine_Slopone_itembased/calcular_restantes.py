@@ -393,7 +393,7 @@ class Recomendador:
         claves = list(set(claves) - set(read_desv)) #restan calcular
         '''
         del read_desv
-        n = 20
+        n = 2
         # Usando compresion de listas
         #print(claves)
         chunks = [claves[i * n:(i + 1) * n] for i in range((len(claves) + n - 1) // n )]
@@ -402,7 +402,7 @@ class Recomendador:
         print("Iniciando calculo concurrente")
         for chunk in chunks:
             inicial = time.time()
-            number_of_workers = 7
+            number_of_workers = 2
             with Pool(number_of_workers) as p:
                 #desviaciones = p.map(calcularDesviaciones1Item_mp, dictlist)
                 p.map(calcularDesviaciones1Item_mp, chunk)

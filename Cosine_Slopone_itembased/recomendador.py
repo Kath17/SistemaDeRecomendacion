@@ -8,6 +8,7 @@ import operator
 
 import pickle
 
+from random import shuffle
 from multiprocessing import Queue
 from multiprocessing import Pool
 from multiprocessing import Process, Manager
@@ -492,6 +493,94 @@ class Recomendador:
         print(recomendaciones)
         return recomendaciones
 
+    
+    def recomendarKItems(self,usuario,k,reload = 0):
+        itemsByUser = []
+        toRecommend = []
+        
+        for items in data:
+            if usuario in data[items]:
+                itemsByUser.append((data[items][usuario],items))
+
+        itemsByUser.sort(reverse = True)
+        kItems = itemsByUser[:k]
+        shuffle(kItems)
+        k_mitad = k//2
+
+        # -------------  Recomendacion SlopeOne -----------------#
+        for item in kItems[:k_mitad]:
+            ####
+            if reload==1: #VOlver a realizar la carga
+                calcularDesviaciones1Item_mp(item[1])
+
+            resSuccess = self.load_desviaciones_item(item[1])
+
+            if not resSuccess: #si no se encontro el archivo
+                print("NO se encontro el archivo, volviendo a calcula")
+                calcularDesviaciones1Item_mp(item[1])
+                self.load_desviaciones_item(item[1])
+                self.load_frecuencias_item(item[1])
+            
+            resSuccessFrec = self.load_frecuencias_item(item[1])
+            if not resSuccessFrec: #si no se encontro el archivo
+                print("NO se encontro el archivo, volviendo a calcula")
+                calcularDesviaciones1Item_mp(item[1])
+                self.load_desviaciones_item(item[1])
+                self.load_frecuencias_item(item[1])
+            ####
+            
+            var = self.desviaciones[item[1]]
+            var = [(k, v) for k, v in var.items()]
+            var.sort(key=lambda Tuple: abs(Tuple[1]))
+            #print("var: ",var[:10])
+
+            for it in var:
+                isIn = False
+                for user in itemsByUser:
+                    if it[0] == user[1] :
+                        isIn = True
+                        break
+                if not isIn :
+                    # LLamar a la func recomendar
+                    temp = self.recomendacionesSlopeOneItem(usuario,it[0])[0]
+                    if not(temp in toRecommend):
+                        toRecommend.append(temp)
+                        break
+          
+        # ------------- Recomendacion Coseno Ajustado -----------------#
+        for item in kItems[k_mitad:]:
+            ####
+            if reload==1: #VOlver a realizar la carga
+                calcularSimilitudes1Item_mp(item[1])
+
+            resSuccess = self.load_similitudes_item(item[1])
+
+            if not resSuccess: #si no se encontro el archivo
+                calcularSimilitudes1Item_mp(item[1])
+                self.load_similitudes_item(item[1])
+            ####
+            
+            var = self.desviaciones[item[1]]
+            var = [(k, v) for k, v in var.items()]
+            var.sort(key=lambda Tuple: Tuple[1], reverse=True)
+            #print("var: ",var[:10])
+
+            for it in var:
+                isIn = False
+                for user in itemsByUser:
+                    if it[0] == user[1] :
+                        isIn = True
+                        break
+                if not isIn :
+                    # LLamar a la func recomendar
+                    temp = (it[0],self.predecirSimilitudCosenoAjustado(usuario,it[0]))
+                    if not(temp in toRecommend):
+                        toRecommend.append(temp)
+                        break
+
+        print("Resultado Final: \n",toRecommend)
+        return toRecommend
+
     def load_desviaciones_item(self, item):
         try:
             with open('desviaciones_pkl_files/' + item + "_desviaciones" + '.pkl', 'rb') as f:
@@ -534,3 +623,8 @@ class Recomendador:
 
     def getCalificacionesUsuario(self, user):
         return data[user]
+
+#SR = Recomendador({})
+#loadDataset()
+#loadLinks()
+#SR.recomendarKItems("10",10)

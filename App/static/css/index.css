@@ -368,7 +368,7 @@ color: rgba(255, 255, 255, 0.4);
   width: 250px;
   height: 140.625px;
   margin-right: 10px;
-  font-size: 5px;
+  font-size: 25px;
   cursor: pointer;
   -webkit-transition: 450ms all;
   transition: 450ms all;
@@ -387,7 +387,7 @@ color: rgba(255, 255, 255, 0.4);
   left: 0;
   right: 0;
   top: 0;
-  font-size: 5px;
+  font-size: 13px;
   opacity: 0;
   background: -webkit-linear-gradient(bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
   background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
@@ -458,4 +458,55 @@ div.sp1:hover a.play_sp1{
 
 .sp1_dat1{
   color: green;
+}
+
+/* More details */
+.btn_details{
+  width: 100%;
+}
+
+.btn_details>button{
+  background-color: rgba(0, 0, 0, 0);
+  width: 100%;
+  border: 0px solid black;
+}
+
+button:focus{
+    outline: none;
+}
+
+button{
+  cursor: pointer;
+}
+
+i.fas{
+  color: white;
+}
+
+.btn_details:hover i.fas{
+  color: red;
+}
+
+.more_details{
+  display: none;
+}
+
+i.fa-times{
+  color: white;
+}
+
+.btn_close>button{
+  background-color: rgba(0, 0, 0, 0);
+  border: 0px solid black;
+}
+
+.more_details{
+  position: relative;
+}
+
+.btn_close{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 40px;
 }

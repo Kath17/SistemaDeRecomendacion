@@ -125,7 +125,7 @@
     <div class="contain">
         <div class="slider">
           <h3>Populares en Netflix</h3>
-          <span onmouseover="scrollEsquerda()" onmouseout="clearScroll()" class="handle handlePrev active">
+          <span class="handle handlePrev active">
             <i class="fa fa-caret-left" aria-hidden="true"></i>
           </span>
 
@@ -168,6 +168,9 @@
                         </div>
                         <div>
                           <span>Comedia</span><span>Drama</span><span>Ciencia</span>
+                        </div>
+                        <div class="btn_details">
+                           <button onclick="more_details();"><i class="fas fa-chevron-down"></i></button>
                         </div>
                       </div>
                   </div>
@@ -364,7 +367,7 @@
             </div>
 
           </div>
-          <span onmouseover="scrollDireita()" onmouseout="clearScroll()"  class="handle handleNext active">
+          <span   class="handle handleNext active">
             <i class="fa fa-caret-right" aria-hidden="true"></i>
           </span>
         </div>
@@ -373,6 +376,81 @@
 
   <!-- POPULARES EN NETFLIX -->
 
+  <!-- More Details -->
+      <div class="more_details" id="more_details">
+         <div class="contenedor" id="contenedor">
+               <div class="fondo_black"></div>
+
+               <div class="fondo_img">
+               <img src="{{url_for('static', filename='img/reciente_fondo.jpg')}}" width="100%">
+               </div>
+
+               <div class="flotante">
+               <div class="reciente_info">
+                     <div class="titulo_imagen_reciente">
+                        <img src="{{url_for('static', filename='img/titulo_imagen_reciente.png')}}" alt="z" width="90%">
+                     </div>
+                     <div class="reciente_datos">
+                        <span>2019</span>
+                        <span class="cuadrito">7+</span>
+                        <span>1 temporada</span>
+                     </div>
+                     <div class="reciente_ver">
+                        <span>Ve la temporada 1</span>
+                     </div>
+                     <div class="episodio_titulo">
+                        <span>
+                           <b>T1:E2</b><span class="transparente">"Operación rescate en la selva (Parte 2)"</span>
+                        </span>
+                     </div>
+                     <div class="sinopsis">
+                        <span class="transparente">Bear debe viajar más de 40 km por la selva centroamericana para entregar medicamentos a una aldea remota, pero ¡no podrá hacerlo sin ti!</span>
+                     </div>
+                     <div class="acciones">
+                     <div class="acc">
+                        <a href="#" class="proximo">
+                        <span><i class="fas fa-play"></i></span>
+                        <span>Proximo Episodio</span>
+                        </a>
+                     </div>
+                        <div class="agregar cuadrito_grande">
+                         <button>
+                             <span><i class="fas fa-plus"></i></span>
+                             <span>Mi lista</span>
+                         </button>
+                        </div>
+                        <div class="calificacion">
+                           <div class="like"><span><i class="fas fa-thumbs-up"></i></span></div>
+                           <div class="dislike"><span><i class="fas fa-thumbs-down"></i></span></div>
+                        </div>
+                     </div>
+                     <div class="meta">
+                        <p>Creado por: </p>
+                        <a href="https://www.google.com">Fulano</a>,
+                        <a href="https://www.google.com">Mengano</a>.
+                     </div>
+               </div>
+                 <div class="reciente_menu">
+                     <div>
+                        <ul>
+                           <li class="menu_activo">Descripcion General</li>
+                            <li>Episodios</li>
+                            <li>Trailers y mas</li>
+                            <li>Mas similares</li>
+                            <li>Detalles</li>
+                        </ul>
+                     </div>
+                 </div>
+               </div>
+         </div>
+
+         <div class="btn_close">
+            <button onclick="_close();"><i class="fas fa-times"></i></button>
+         </div>
+
+      </div>
+
+  <!-- More Details -->
 
   <!-- FOOTER -->
   <div class="footer">
@@ -408,11 +486,11 @@
 
 
 
-  <script src="../js/vendor/modernizr-3.7.1.min.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/modernizr-3.7.1.min.js') }}"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script>window.jQuery || document.write('<script src="../js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
-  <script src="../js/plugins.js"></script>
-  <script src="../js/main.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/plugins.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
 
   <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
   <script>

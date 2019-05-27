@@ -327,19 +327,26 @@ class Recomendador:
             filee.write(cl+"\n") 
         filee.close() 
         '''
-
+        
         del read_sim
         n = 12
         chunks = [claves[i * n:(i + 1) * n] for i in range((len(claves) + n - 1) // n )]
         print("total de subarrays:", len(chunks))
         print("Iniciando calculo concurrente")
         for chunk in chunks:
+            '''
+            for a in chunk:
+                inicial = time.time()
+                calcularSimilitudes1Item_mp(a)
+                print("Tiempo para calcular Similitudes de un item", time.time()-inicial)
+
+            '''
             inicial = time.time()
-            number_of_workers = 12
+            number_of_workers = 4
             with Pool(number_of_workers) as p:
                 p.map(calcularSimilitudes1Item_mp, chunk)
-
-            print("Tiempo para calcular similitudes de 500 peliculas", time.time()-inicial)
+            
+            print("Tiempo para calcular Similitudes de 12 items", time.time()-inicial)
             gc.collect()
 
 
@@ -386,7 +393,7 @@ class Recomendador:
         claves = list(set(claves) - set(read_desv)) #restan calcular
         '''
         del read_desv
-        n = 500
+        n = 20
         # Usando compresion de listas
         #print(claves)
         chunks = [claves[i * n:(i + 1) * n] for i in range((len(claves) + n - 1) // n )]
@@ -395,11 +402,11 @@ class Recomendador:
         print("Iniciando calculo concurrente")
         for chunk in chunks:
             inicial = time.time()
-            number_of_workers = 56
+            number_of_workers = 7
             with Pool(number_of_workers) as p:
                 #desviaciones = p.map(calcularDesviaciones1Item_mp, dictlist)
                 p.map(calcularDesviaciones1Item_mp, chunk)
-            print("Tiempo para calcular desviaciones de 500 peliculas", time.time()-inicial)
+            print("Tiempo para calcular desviaciones de 12 peliculas", time.time()-inicial)
             gc.collect()
     
 
@@ -460,8 +467,8 @@ class Recomendador:
             self.load_desviaciones_item(itemObj)
             self.load_frecuencias_item(itemObj)
 
-        #print(self.desviaciones[itemObj])
-        #print("DIvision")
+        print(self.desviaciones[itemObj])
+        print("DIvision")
 
         ####
 
@@ -489,7 +496,6 @@ class Recomendador:
         # finalmente ordenar y retornar
         recomendaciones.sort(key=lambda artistTuple: artistTuple[1], reverse = True)
         #print(self.desviaciones)
-        print(recomendaciones)
         return recomendaciones
 
     def load_desviaciones_item(self, item):
@@ -534,3 +540,34 @@ class Recomendador:
 
     def getCalificacionesUsuario(self, user):
         return data[user]
+
+
+
+if __name__ == '__main__':
+    recomendador = Recomendador({})
+    tInit = time.time()
+    loadDataset()
+    print("time to load data:", time.time()-tInit)
+    t = time.time()
+
+    ready_desv = scan_desviaciones_files()
+    recomendador.calcularDesviacionesTodos_mp(ready_desv)
+
+
+'''
+
+if __name__ == '__main__':
+    recomendador = Recomendador({})
+    #recomendador.loadDataset("ml-latest/")
+    tInit = time.time()
+    loadDataset()
+    print("time to load data:", time.time()-tInit)
+    #createTableSimilitudes()
+    #t = time.time()
+    #print("Iniciando calculo de similitudes")
+    #calcularSimilitudes1Item_mp("1")
+    #print("Time to calculate similitudes:", time.time()-t)
+    
+    ready_sim = scan_similitudes_files()
+    recomendador.calcularSimilitudesCosenoTodos_mp(ready_sim)
+'''

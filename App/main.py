@@ -16,6 +16,7 @@ recomendador.loadDataset()
 recomendador.loadLinks()
 os.chdir(owd)
 print("time to load data:", time.time()-tInit)
+print(len(recomendador.clavesTotal))
 
 
 app = Flask(__name__)
@@ -45,7 +46,7 @@ def slopeOne():
 		item = request.form['item_slopeone']
 		metodo = request.form["itembased_m"]
 
-		print(usuario)
+		#print(usuario)
 		t = time.time()
 		owd = os.getcwd()
 		os.chdir("../Cosine_Slopone_itembased/")
@@ -56,7 +57,11 @@ def slopeOne():
 				mensaje = predecido["mensaje"]
 				predecido = predecido["rating"]
 			else:
-				predecido = predecido[0][1]
+				if predecido == []:
+					mensaje = "El item no tiene niguna relación con el usuario"
+					predecido = 0
+				else:
+					predecido = predecido[0][1]
 		else:
 			predecido = recSystem.predecirSimilitudCosenoAjustado(usuario, item, reload=0)
 			if type(predecido) is dict:

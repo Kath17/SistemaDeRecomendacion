@@ -184,6 +184,22 @@ def calcularSimilitudes1Item_mp(item):
     print("saved")
 
 
+######FUNCION AUXILIA, SOLO PARA NO REESCRIBIR ARCHIVOS ORIGINALES
+
+def recalcularSimilitudes1Item_mp(item):
+    similitudes = {}
+    ratingsItem1 = data[item]
+    for it in clavesTotal:
+        a = calcularSimilitudCosenoAjustado_mp(ratingsItem1, it)
+        if a:
+            similitudes[a[0]] = a[1]
+    
+    print("Saving to file")
+    serialize_obj_similitudes(similitudes, item+"_similitudes2")
+    del similitudes
+    del ratingsItem1
+    gc.collect()
+    print("saved")
 
 class Recomendador:
 
@@ -198,25 +214,84 @@ class Recomendador:
         if type(data).__name__ == 'dict':
             data = data
     
+    def agregarRatingCosenoAjustado(self, userId, itemId, rating):
+        contador = 0
+        itemsCalificados = []
+        for it in clavesTotal:
+            if userId in data[it]:
+                contador +=1
+                itemsCalificados.append(it)
+
+        #Actualizar promedios de usuarios
+        promedios[userId] = (promedios[userId] + rating)/contador
+        self.save_obj(promedios, "promedios_users27m_2")
+
+        print("Nuevas similitudes:")
+        inicial = time.time()
+
+        for item in itemsCalificados:
+            self.load_similitudes_item(item)
+            a = calcularSimilitudCosenoAjustado_mp(data[item], itemId)
+            if a:
+                self.desviaciones[item][a[0]] = a[1]
+                print("Item: ", item,"- ",self.desviaciones[item][itemId])
+                print("Saving to file")
+                serialize_obj_similitudes(self.desviaciones[item], item+"_similitudes2")
+            del self.desviaciones
+            self.desviaciones = {}
+        
+        #Actualizar tambien la fila del item
+        recalcularSimilitudes1Item_mp(item)
+        '''
+        for item in clavesTotal:
+            if userId in data[item]: #peliculas que el usuario califico
+                t = time.time()
+                
+                similitudes = {}
+                ratingsItem1 = data[item]
+                for it in clavesTotal:
+                    a = calcularSimilitudCosenoAjustado_mp(ratingsItem1, it)
+                    if a:
+                        similitudes[a[0]] = a[1]
+                
+                print("Saving to file")
+                serialize_obj_similitudes(similitudes, item+"_similitudes2")
+                self.load_similitudes_item(item)
+                print("Item: ", item,"- ",self.desviaciones[item][itemId])
+                del similitudes
+                del ratingsItem1
+                gc.collect()
+                print("saved")
+                self.desviaciones = {}
+                self.frecuencias = {}
+        '''
+
+        #print("Tiempo para calcular recalcular la matriz de similitudes", time.time()-inicial)
+
+        #calcularDesviaciones1Item_mp(itemId)
+
     def agregarRating(self, userId, itemId, rating):
         if itemId not in data:
             data[itemId] = {}
+            clavesTotal.append(itemId)
         rating = float(rating)
         data[itemId][userId] = rating
+        print("Guardando nueva data")
+        self.save_obj(data, "ratings_products27m2")
         print("Nuevas desviación y frecuencias:")
+        inicial = time.time()
         for item in clavesTotal:
             #print("item:", item)
             if userId in data[item]: #peliculas que el usuario califico
+                '''
+                if item==itemId: #Es el mismo item
+                    continue
+                '''
                 resSuccess = self.load_desviaciones_item(item)
                 if not resSuccess:
                     print("No encuentra archivo")
                     continue
                 self.load_frecuencias_item(item)
-                '''
-                x = self.desviaciones[item]
-                a = self.desviaciones[item][itemId]
-                b = self.frecuencias[item][itemId]
-                '''
                 nuevaDesviacion = (self.desviaciones[item][itemId]*self.frecuencias[item][itemId]*(rating-data[item][userId]))/(self.frecuencias[item][itemId] + 1)
                 self.desviaciones[item][itemId] = nuevaDesviacion
                 self.frecuencias[item][itemId] += 1
@@ -224,9 +299,14 @@ class Recomendador:
                 serialize_obj(self.desviaciones, item+"_desviaciones2")
                 serialize_obj(self.frecuencias, item+"_frecuencias2")
 
-                print(self.desviaciones[item][itemId], " - ", self.frecuencias[item][itemId])
+                print("item:",item,"-",self.desviaciones[item][itemId], " - ", self.frecuencias[item][itemId])
                 del self.desviaciones
                 del self.frecuencias
+                self.desviaciones = {}
+                self.frecuencias = {}
+
+        self.agregarRatingCosenoAjustado(userId, itemId, rating)
+        print("Tiempo para calcular matriz de similitud y desviaciones", time.time()-inicial)
 
         #calcularDesviaciones1Item_mp(itemId)
     

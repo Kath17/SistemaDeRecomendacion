@@ -7,10 +7,11 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="manifest" href="site.webmanifest">
+  <!--<link rel="manifest" href="site.webmanifest">-->
   <link rel="icon" type="image/png" href="{{url_for('static', filename='img/icon.png')}}">
   <!-- Place favicon.ico in the root directory -->
 
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
   <link rel="stylesheet" href="{{url_for('static',filename='css/normalize.css')}}">
   <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
   <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
@@ -377,6 +378,93 @@
 
   <!-- POPULARES EN NETFLIX -->
 
+  <!-- RECOMENDADOS -->
+    <div class="contain">
+        <div class="slider">
+          <h3> Películas ya vistas </h3>
+
+          <span class="handle handlePrev active">
+            <i class="fa fa-caret-left" aria-hidden="true"></i>
+          </span>
+
+          <div id="scroller" class="row" action="/" method="post">
+            <div class="row__inner">
+
+              {%for i in result%}
+
+                <div class="gui-card">
+                  <div class="gui-card__media" id="result"+"{{i[1]}}">
+                    <!--<div class="gui-card__img"><p id="results"> </p></div>-->
+                  </div>
+                  <div class="gui-card__details">
+                    <div class="gui-card__title"
+                      <div class="gui-card__title">
+                        <!--<a class="play_sp" href="index.html"><i class="fas fa-play"></i></a>-->
+                        <!-- <h2 id="title">{{i[1]}}</h2> -->
+                        <div class="sp_title"> <h2 id="title"+"{{i[1]}}"></h2></div>
+                        <div id="sp1_dat">
+                          <span class="sp1_dat1">{{i[0]*100/5}}% de coincidencia</span>
+                          <span class="sp1_dat2">13+</span>
+                          <span class="sp1_dat3">1h 53m</span>
+                        </div>
+                        <div>
+                          <span>Comedia</span><span>Drama</span><span>Ciencia</span>
+                        </div>
+                        <div class="btn_details">
+                          <button onclick="more_details();"><i class="fas fa-chevron-down"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <script type="text/javascript">
+                    'use strict';
+                    var resultj = "result" + "{{i[1]}}";
+                    var titlej = "title" + "{{i[1]}}"
+                    console.log(resultj);
+                    console.log(titlej)
+                    //var id_peli = "{{ListaIMDB[i[1]]}}";
+                    //var id_peli = "0114709"
+                    var imageUrl = "https://api.themoviedb.org/3/find/tt"+"0114709"+'?api_key='+"43223a67169279b9b525638821d593b0"+"&external_source=imdb_id";
+                    console.log(imageUrl);
+
+                    $.ajax({
+                      type: "GET",
+                      dataType: "json", // URL a la que se enviará la solicitud Ajax
+                      url: imageUrl,
+                    })
+                      .done(function( data, textStatus, jqXHR ) {
+                        if ( console && console.log ) {
+                          console.log(data.movie_results[0].backdrop_path)
+                          console.log( "La solicitud se ha completado correctamente." );
+                          title = data.movie_results[0].title;
+                          $("#"+titlej).html(title);
+                          $('#'+resultj).append('<img class="gui-card__img" src="' + "http://image.tmdb.org/t/p/w500"+data.movie_results[0].backdrop_path + '" alt=""  />');
+                        }
+                      })
+                      .fail(function( jqXHR, textStatus, errorThrown ) {
+                        if ( console && console.log ) {
+                          console.log( "La solicitud a fallado: " +  textStatus);
+                        }
+                    });
+                  </script>
+
+              {%endfor%}
+
+            </div>
+
+          </div>
+
+          <span   class="handle handleNext active">
+            <i class="fa fa-caret-right" aria-hidden="true"></i>
+          </span>
+        </div>
+    </div>
+
+
+  <!-- RECOMENDADOS -->
+
+
   <!-- More Details -->
       <div class="more_details" id="more_details">
          <div class="contenedor" id="contenedor">
@@ -484,8 +572,9 @@
   </div>
   <!-- FOOTER -->
 
+  <!-- SCRIPT-->
 
-
+  <!-- SCRIPT-->
 
   <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/modernizr-3.7.1.min.js') }}"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>

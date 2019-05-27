@@ -20,10 +20,23 @@ print(len(recomendador.clavesTotal))
 
 
 app = Flask(__name__)
+usuario = "10"
+k_value = 10
 
-@app.route("/")
+@app.route("/",methods=['GET','POST'])
 def home():
-    return render_template("index.html")
+    owd = os.getcwd()
+    os.chdir("../Cosine_Slopone_itembased/")
+    ListaVistas = recSystem.YaVistos(usuario)
+    #print(ListaVistas)
+
+    ListaIMDB = {}
+    for i in ListaVistas:
+        ListaIMDB[i[1]] =  recSystem.getImdbIdByMovieId(i[1])
+    #toRecommend = recSystem.recomendarKItems(usuario,k_value)
+    #print(toRecommend)
+    os.chdir(owd)
+    return render_template("index.html",result = ListaVistas, usuario = usuario, ListaIMDB = ListaIMDB)
 
 @app.route("/prueba")
 def salvador():

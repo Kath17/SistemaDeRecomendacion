@@ -587,14 +587,17 @@ class Recomendador:
         print(recomendaciones)
         return recomendaciones
 
-    
-    def recomendarKItems(self,usuario,k,reload = 0):
+    def YaVistos(self,usuario):
         itemsByUser = []
-        toRecommend = []
-        
         for items in data:
             if usuario in data[items]:
                 itemsByUser.append((data[items][usuario],items))
+        return itemsByUser
+    
+    def recomendarKItems(self,usuario,k,reload = 0):
+        toRecommend = []
+        
+        itemsByUser = self.YaVistos(usuario)
 
         itemsByUser.sort(reverse = True)
         kItems = itemsByUser[:k]
@@ -722,3 +725,5 @@ class Recomendador:
 #loadDataset()
 #loadLinks()
 #SR.recomendarKItems("10",10)
+#print("Ya vio: ",SR.YaVistos("10"))
+
